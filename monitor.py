@@ -32,6 +32,7 @@ import time
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from subprocess import call
 
 nmorning = 10;#Time to stop monitoring
 nevening = 22;#Time to start monitoring
@@ -93,17 +94,22 @@ def closed():
     print 'Closed'
     print datetime.datetime.now()
     print ''
+	
+def chime():
+	call(["beep", "-l 2000"])
 
 while True:
     morning = datetime.datetime.now().replace(hour=nmorning, minute=0, second=0, microsecond=0)
     evening = datetime.datetime.now().replace(hour=nevening, minute=0, second=0, microsecond=0)
     hour = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
-    if hour < morning or hour > evening:
-        red = ser.read()
-        if red == '1':
-            closed()
-        elif red == '0':
-            opened()
-    pass
+	red = ser.read()
+	if red == '1':
+		if hour < morning or hour > evening:
+			closed()
+	elif red == '0':
+		chime()
+		if hour < morning or hour > evening:
+			opened()
+	pass
 
 ser.close()
