@@ -41,7 +41,7 @@ SMTP_PORT = 587
  
 sender = 'spsu.auv.team+security@gmail.com'
 recipient = 'taylormartin357@gmail.com, tmartin3@spsu.edu'
-subject = 'AUV After Hours Access'
+#subject = 'AUV After Hours Access'
  
 ser = serial.Serial('/dev/ttyACM0',9600)
 
@@ -56,11 +56,11 @@ def savepic():
 
 def opened():
     now = datetime.datetime.now()
-    time.sleep(3)
+    time.sleep(1)
     savepic()
     
     msg = MIMEMultipart()
-    msg['Subject'] = subject
+    msg['Subject'] = "AUV After Hours Access %s" %now.strftime("%A, %d. %B %Y %I:%M%p")
     msg['To'] = recipient
     msg['From'] = sender
         
@@ -80,7 +80,7 @@ def opened():
     session.ehlo()
     session.starttls()
     session.ehlo
-    session.login(GMAILUSER, GMAILPASS)
+    session.login('spsuauvteam', 'SPSU.Zodiac.0540')
  
     session.sendmail(sender, recipient, msg.as_string())
     session.quit()
@@ -97,7 +97,7 @@ def closed():
 while True:
     morning = datetime.datetime.now().replace(hour=nmorning, minute=0, second=0, microsecond=0)
     evening = datetime.datetime.now().replace(hour=nevening, minute=0, second=0, microsecond=0)
-    hour = datetime.datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)
+    hour = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
     if hour < morning or hour > evening:
         red = ser.read()
         if red == '1':
