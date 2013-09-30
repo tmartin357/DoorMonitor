@@ -40,7 +40,7 @@ SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
  
 sender = 'spsu.auv.team+security@gmail.com'
-recipient = 'taylormartin357@gmail.com, tmartin3@spsu.edu'
+recipient = 'taylormartin357@gmail.com, bstedwell@gmail.com, jburley@spsu.edu, spsuauvteam@gmail.com'
 #subject = 'AUV After Hours Access'
  
 ser = serial.Serial('/dev/ttyACM0',9600)
@@ -80,7 +80,7 @@ def opened():
     session.ehlo()
     session.starttls()
     session.ehlo
-    session.login('spsuauvteam', 'SPSU.Zodiac.0540')
+    session.login('spsuauvteam', '')
  
     session.sendmail(sender, recipient, msg.as_string())
     session.quit()
@@ -97,9 +97,9 @@ def closed():
 while True:
     morning = datetime.datetime.now().replace(hour=nmorning, minute=0, second=0, microsecond=0)
     evening = datetime.datetime.now().replace(hour=nevening, minute=0, second=0, microsecond=0)
-    hour = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
+    #hour = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
+    red = ser.read()
     if hour < morning or hour > evening:
-        red = ser.read()
         if red == '1':
             closed()
         elif red == '0':
